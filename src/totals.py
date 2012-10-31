@@ -11,16 +11,24 @@ parser.add_argument('-m', dest='month', type=str,
                    help='only display totals for the month')
 parser.add_argument('-y', dest='year', type=str,
 					help='only display totals for the year')
+parser.add_argument('-e', dest='email', type=str,
+					help='search for payments by email')
 
 args = parser.parse_args()
 total = 0
 with args.filename as csvfile:
 	content = csv.DictReader(csvfile)
+	if args.email:
+		for row in content:
+			if row['Email'] == args.email:
+				amountwithfee = float(row['Amount']) + float(row['Fee'])
+				print row['Date'] , amountwithfee , row['Type']
+				total += amountwithfee
 	if args.month:
 		for row in content:
 			if row['Date'].startswith(args.month):
 				if row['Type'] == 'invoice payment':
-					print row['Date'] , row['Email'] , row['Amount']
+					print row['Date'] , row['From/To'] , row['Email'] , row['Amount']
 					total += float(row['Amount'].replace(',', ''))
 	else:
 		for row in content:	
