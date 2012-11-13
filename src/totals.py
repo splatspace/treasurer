@@ -2,6 +2,7 @@
 import csv
 import argparse
 import sys
+import datetime
 
 parser = argparse.ArgumentParser(description='Display totals from WePay csv dump.')
 parser.add_argument('filename', metavar='csv_file', type=argparse.FileType('r'),
@@ -16,6 +17,7 @@ parser.add_argument('-e', dest='email', type=str,
 
 args = parser.parse_args()
 total = 0
+now = datetime.datetime.now()
 with args.filename as csvfile:
 	content = csv.DictReader(csvfile)
 	if args.email:
@@ -27,9 +29,10 @@ with args.filename as csvfile:
 	if args.month:
 		for row in content:
 			if row['Date'].startswith(args.month):
-				if row['Type'] == 'invoice payment':
-					print row['Date'] , row['From/To'] , row['Email'] , row['Amount']
-					total += float(row['Amount'].replace(',', ''))
+				if row['Date'].endswith(str(now.year)):
+					if row['Type'] == 'invoice payment':
+						print row['Date'] , row['From/To'] , row['Email'] , row['Amount']
+						total += float(row['Amount'].replace(',', ''))
 	else:
 		for row in content:	
 			if row['Type'] == 'invoice payment':
