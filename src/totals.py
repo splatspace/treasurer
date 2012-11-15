@@ -35,10 +35,9 @@ with args.filename as csvfile:
 						total += float(row['Amount'].replace(',', ''))
 	else:
 		for row in content:	
-			if row['Type'] == 'invoice payment':
-				print row['Amount']
-				total += float(row['Amount'].replace(',', ''))
-			else:
-				print row['Amount'] , ' skipped'
+			if row['Type'] != 'withdrawal':
+				if row['Date'].endswith(str(now.year)):
+					print row['Date'] , row['From/To'] , row['Email'] , row['Amount'], 				row['Type']
+					total += float(row['Amount'].replace(',', ''))
 args.filename.close()
 print total
