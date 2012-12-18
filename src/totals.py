@@ -22,20 +22,20 @@ with args.filename as csvfile:
 	content = csv.DictReader(csvfile)
 	if args.email:
 		for row in content:
-			if row['Email'] == args.email:
+			if row['Email'] == args.email and row['Status'] == 'Complete':
 				amountwithfee = float(row['Amount']) + float(row['Fee'])
 				print row['Date'] , amountwithfee , row['Type']
 				total += amountwithfee
 	if args.month:
 		for row in content:
-			if row['Date'].startswith(args.month):
+			if row['Date'].startswith(args.month) and row['Status'] == 'Complete':
 				if row['Date'].endswith(str(now.year)):
 					if row['Type'] == 'invoice payment':
 						print row['Date'] , row['From/To'] , row['Email'] , row['Amount']
 						total += float(row['Amount'].replace(',', ''))
 	else:
 		for row in content:	
-			if row['Type'] != 'withdrawal':
+			if row['Type'] != 'withdrawal' and row['Status'] == 'Complete':
 				if row['Date'].endswith(str(now.year)):
 					print row['Date'] , row['From/To'] , row['Email'] , row['Amount'], 				row['Type']
 					total += float(row['Amount'].replace(',', ''))
