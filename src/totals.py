@@ -28,16 +28,16 @@ with args.filename as csvfile:
 				total += amountwithfee
 	if args.month:
 		for row in content:
-			if row['Date'].startswith(args.month) and row['Status'] == 'Complete':
-				if row['Date'].endswith(str(now.year)):
-					if row['Type'] == 'invoice payment':
-						print row['Date'] , row['From/To'] , row['Email'] , row['Amount']
-						total += float(row['Amount'].replace(',', ''))
+			if (row['Date'].startswith(args.month) and row['Status'] == 'Complete' and
+				row['Date'].endswith(str(now.year)) and
+				row['Type'] == 'invoice payment'):
+					print row['Date'] , row['From/To'] , row['Email'] , row['Amount']
+					total += float(row['Amount'].replace(',', ''))
 	else:
 		for row in content:	
-			if row['Type'] != 'withdrawal' and row['Status'] == 'Complete':
-				if row['Date'].endswith(str(now.year)):
-					print row['Date'] , row['From/To'] , row['Email'] , row['Amount'], 				row['Type']
+			if (row['Type'] != 'withdrawal' and row['Status'] == 'Complete' and
+				row['Date'].endswith(str(now.year))):
+					print row['Date'] , row['From/To'] , row['Email'] , row['Amount'] , row['Type']
 					total += float(row['Amount'].replace(',', ''))
 args.filename.close()
 print total
