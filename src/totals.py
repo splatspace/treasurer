@@ -18,6 +18,10 @@ parser.add_argument('-e', dest='email', type=str,
 args = parser.parse_args()
 total = 0
 now = datetime.datetime.now()
+if args.year:
+	year = args.year
+else:
+	year = now.year
 with args.filename as csvfile:
 	content = csv.DictReader(csvfile)
 	if args.email:
@@ -29,14 +33,14 @@ with args.filename as csvfile:
 	if args.month:
 		for row in content:
 			if (row['Date'].startswith(args.month) and row['Status'] == 'Complete' and
-				row['Date'].endswith(str(now.year)) and
+				row['Date'].endswith(str(year)) and
 				row['Type'] == 'invoice payment'):
 					print row['Date'] , row['From/To'] , row['Email'] , row['Amount']
 					total += float(row['Amount'].replace(',', ''))
 	else:
 		for row in content:	
 			if (row['Type'] != 'withdrawal' and row['Status'] == 'Complete' and
-				row['Date'].endswith(str(now.year))):
+				row['Date'].endswith(str(year))):
 					print row['Date'] , row['From/To'] , row['Email'] , row['Amount'] , row['Type']
 					total += float(row['Amount'].replace(',', ''))
 args.filename.close()
