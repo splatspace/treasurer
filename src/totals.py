@@ -27,7 +27,7 @@ with args.filename as csvfile:
 	if args.email:
 		for row in content:
 			if row['Email'] == args.email and row['Status'] == 'Complete':
-				amountwithfee = float(row['Amount']) + float(row['Fee'])
+				amountwithfee = float(row['Amount']) - float(row['Fee'])
 				print row['Date'] , amountwithfee , row['Type']
 				total += amountwithfee
 	if args.month:
